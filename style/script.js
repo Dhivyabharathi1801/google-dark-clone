@@ -27,72 +27,26 @@ document.querySelector('.labs-icon').onclick = () => {
   window.location.href = 'https://labs.google/';
 };
 
-// Google Apps
-document.querySelector('.apps').onclick = () => {
-  window.location.href = 'https://www.google.com/intl/en/about/products';
-};
-
 // Profile
 document.querySelector('.profile').onclick = () => {
   window.location.href = 'https://myaccount.google.com/';
 };
 
-/* ---------- SEARCH BAR ICONS ---------- */
+/* ---------- GOOGLE APPS PANEL ---------- */
 
-// Plus icon
-document.querySelector('.plus').onclick = () => {
-  alert('Add shortcut (Demo)');
+const appsBtn = document.getElementById("appsBtn");
+const appsPanel = document.getElementById("appsPanel");
+
+appsBtn.onclick = (e) => {
+  e.stopPropagation();
+  appsPanel.classList.toggle("show");
 };
 
-const micBtn = document.querySelector('.icon-img');
-const searchInput = document.getElementById('searchInput');
+document.addEventListener("click", () => {
+  appsPanel.classList.remove("show");
+});
 
-if ('webkitSpeechRecognition' in window) {
-  const recognition = new webkitSpeechRecognition();
-
-  recognition.continuous = false;
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-
-  micBtn.onclick = () => {
-    recognition.start();
-    micBtn.style.opacity = '0.6';
-  };
-
-  recognition.onresult = (event) => {
-    const voiceText = event.results[0][0].transcript;
-    searchInput.value = voiceText;
-    micBtn.style.opacity = '1';
-  };
-
-  recognition.onerror = () => {
-    micBtn.style.opacity = '1';
-    alert('Microphone access denied');
-  };
-
-  recognition.onend = () => {
-    micBtn.style.opacity = '1';
-  };
-
-} else {
-  alert('Voice search not supported in this browser');
-}
-
-
-// Lens (Camera)
-document.querySelector('.lens-icon').onclick = () => {
-  window.location.href = 'https://lens.google/';
-};
-document.querySelector('.lens-icon').onclick = () => {
-  window.open('https://lens.google.com/', '_blank');
-};
-
-// AI Mode
-document.querySelector('.ai-btn').onclick = () => {
-  alert('AI Mode coming soon');
-};
-
-/* ---------- SEARCH INPUT ---------- */
+/* ---------- SEARCH ---------- */
 
 function search() {
   const query = document.getElementById('searchInput').value.trim();
@@ -102,35 +56,57 @@ function search() {
   }
 }
 
-// Enter key search
 document.getElementById('searchInput').addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    search();
-  }
+  if (e.key === 'Enter') search();
 });
+
+/* ---------- MIC (VOICE SEARCH) ---------- */
+
+const micIcon = document.querySelector('.icon-img');
+const searchInput = document.getElementById('searchInput');
+
+if ('webkitSpeechRecognition' in window) {
+  const recognition = new webkitSpeechRecognition();
+
+  recognition.lang = 'en-IN';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  micIcon.onclick = () => {
+    recognition.start();
+    micIcon.style.opacity = '0.6';
+  };
+
+  recognition.onresult = (event) => {
+    searchInput.value = event.results[0][0].transcript;
+    micIcon.style.opacity = '1';
+  };
+
+  recognition.onerror = () => {
+    micIcon.style.opacity = '1';
+    alert('Microphone permission denied');
+  };
+
+  recognition.onend = () => {
+    micIcon.style.opacity = '1';
+  };
+
+} else {
+  alert('Voice search not supported in this browser');
+}
+
+/* ---------- GOOGLE LENS ---------- */
+
+document.querySelector('.lens-icon').onclick = () => {
+  window.open('https://lens.google.com/', '_blank');
+};
+
+/* ---------- AI MODE (HOVER ONLY – already handled in CSS) ---------- */
 
 /* ---------- MAIN BUTTONS ---------- */
 
-// Google Search
 document.querySelector('.buttons button:nth-child(1)').onclick = search;
 
-// I'm Feeling Lucky
 document.querySelector('.buttons button:nth-child(2)').onclick = () => {
   window.location.href = 'https://www.google.com/doodles';
 };
-
-/* ---------- LANGUAGE LINKS ---------- */
-
-document.querySelectorAll('.languages a').forEach(link => {
-  link.onclick = () => {
-    window.location.href = 'https://www.google.com/preferences#languages';
-  };
-});
-
-/* ---------- FOOTER LINKS ---------- */
-
-document.querySelectorAll('footer a').forEach(link => {
-  link.onclick = () => {
-    alert('Footer link clicked (Demo)');
-  };
-});
